@@ -1,0 +1,169 @@
+#root {
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  text-align: center;
+}
+
+.logo {
+  height: 40pt;
+  padding: 5pt;
+}
+
+.card {
+  padding: 2em;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  padding-top: 70pt;
+}
+
+.pageWrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  padding-top: 70pt;
+}
+
+.header {
+  position: fixed;
+  top: 10pt;
+  left: 10pt;
+  right: 10pt;
+  background-color: #4c3b4d;
+  width: calc(100vw - 40pt);
+  height: 50pt;
+  border-radius: 50pt;
+  display: flex;
+  flex-direction: row;
+  padding-left: 10pt;
+  padding-right: 10pt;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #ada8b6;
+  width: 100vw;
+  height: 35pt;
+}
+
+.title {
+  font-size: 32pt;
+  color: #a53860;
+}
+
+.block {
+  flex: auto;
+  display: flex;
+  flex-grow: unset;
+  margin-left: 20pt;
+  margin-right: 20pt;
+  margin-bottom: 10pt;
+  background-color: #ffeedb;
+  border-radius: 10pt;
+  justify-self: center;
+}
+
+.nav {
+  flex: auto;
+  display: flex;
+  margin-left: 20pt;
+  margin-right: 20pt;
+  margin-bottom: 10pt;
+  width: calc(100vw - 70pt);
+  background-color: #ffeedb;
+  border-radius: 10pt;
+  justify-content: space-between;
+  padding: 10pt;
+  padding-bottom: 10pt;
+  color: black;
+  align-items: center;
+}
+
+.highlight {
+  background-color: #ffeedb;
+  padding-top: 30pt;
+  padding-bottom: 10pt;
+  color: black;
+}
+
+.search {
+  background-color: white;
+  color: black;
+  padding: 8pt;
+  margin-left: 30pt;
+  margin-right: 30pt;
+  border-radius: 15pt;
+  border-style: solid;
+  border-color: #4c3b4d;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.resultContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 20pt;
+  margin-right: 20pt;
+  margin-bottom: 10pt;
+  width: calc(100vw - 50pt);
+}
+
+.resultColumns {
+  display: flex;
+  gap: 10pt;
+  width: 100%;
+  max-width: 1800px;
+}
+
+.resultColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10pt;
+}
+
+.resultBlock {
+  width: 100%;
+  border-radius: 10pt;
+  background-color: #ffeedb;
+}
+
+.single {
+  padding: 10pt;
+  gap: 10pt;
+}
+
+.maxW {
+  max-width: 300pt;
+}
+
+.collectionRow {
+  padding: 5pt;
+  border-top-style: dashed;
+  border-top-width: 1pt;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-items: left;
+}
