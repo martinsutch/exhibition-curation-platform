@@ -30,7 +30,10 @@ const CollectionPage = () => {
 
   return (
     <div className="page">
-      <CollectionHeader collection={{ id: collection, title }} />
+      <CollectionHeader
+        collection={{ id: collection, title }}
+        setTitle={setTitle}
+      />
       <CollectionArts art={art} isLoading={isLoading} error={error} />
     </div>
   );

@@ -20,19 +20,26 @@ const NewCollectionBar = ({ setCollections }) => {
   return (
     <div className="collectionRow">
       {expanded ? (
-        <>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleCreateCollection();
+          }}
+          className="row gap pushApart"
+        >
           <div className="left">
-            <span>Name your new collection:</span>
+            <label htmlFor="collectionName">Name your new collection:</label>
             <input
+              id="collectionName"
               type="text"
               value={newCollectionTitle}
-              onChange={(e) => {
-                setNewCollectionTitle(e.target.value);
-              }}
+              onChange={(e) => setNewCollectionTitle(e.target.value)}
+              disabled={isWaiting}
             />
           </div>
-          <div>
+          <div className="row gap">
             <button
+              type="button"
               onClick={() => {
                 setExpanded(false);
                 setNewCollectionTitle("");
@@ -41,14 +48,11 @@ const NewCollectionBar = ({ setCollections }) => {
             >
               Cancel
             </button>
-            <button
-              onClick={handleCreateCollection}
-              disabled={isWaiting || !newCollectionTitle}
-            >
+            <button type="submit" disabled={isWaiting || !newCollectionTitle}>
               Create
             </button>
           </div>
-        </>
+        </form>
       ) : (
         <>
           <span>Start a new collection</span>

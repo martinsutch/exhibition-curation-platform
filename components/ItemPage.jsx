@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ItemImage from "./ItemImage";
 import ItemDetails from "./ItemDetails";
-import { useItem } from "../src/hooks/useCollections";
+import { useItem } from "../src/hooks/useItem";
 import BackBar from "./backBar";
 import ItemCollections from "./ItemCollections";
 

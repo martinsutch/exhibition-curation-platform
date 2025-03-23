@@ -40,7 +40,7 @@ const CollectionArts = ({ isLoading, error, art }) => {
         {splitResults.map((column, colIndex) => (
           <div key={colIndex} className="resultColumn">
             {column.map((art) => (
-              <CollectionArt key={art.artpath} art={art} />
+              <CollectionArt key={art.id} art={art} />
             ))}
           </div>
         ))}

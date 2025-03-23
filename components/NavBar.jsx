@@ -1,11 +1,14 @@
-const NavBar = ({ handlePrevPage, page, handleNextPage, data, lastPage }) => {
+const NavBar = ({ handlePrevPage, page, handleNextPage, noData, lastPage }) => {
   return (
     <div className="nav row">
       <button onClick={handlePrevPage} disabled={page === 1}>
         Previous
       </button>
       <span>Page {page}</span>
-      <button onClick={handleNextPage} disabled={!data || page + 1 >= lastPage}>
+      <button
+        onClick={handleNextPage}
+        disabled={noData || page + 1 >= lastPage}
+      >
         Next
       </button>
     </div>

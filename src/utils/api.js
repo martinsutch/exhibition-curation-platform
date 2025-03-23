@@ -45,6 +45,11 @@ export const getCollections = async () => {
   return data;
 };
 
+export const patchCollection = async (info) => {
+  const { data } = await api.patch("/collections", info);
+  return data;
+};
+
 export const deleteCollection = async (info) => {
   const { data } = await api.delete("/collections", { data: info });
   return data;
@@ -56,6 +61,11 @@ export const getArt = async (collectionId) => {
 };
 
 export const addArt = async (info) => {
-  const { data } = await api.post(`/art`, info);
+  const { data } = await api.post("/art", info);
+  return data;
+};
+
+export const deleteArt = async (info) => {
+  const { data } = await api.delete("/art", { data: info });
   return data;
 };
