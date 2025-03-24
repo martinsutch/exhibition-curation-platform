@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import ItemImage from "./ItemImage";
 import ItemDetails from "./ItemDetails";
 import { useItem } from "../src/hooks/useItem";
-import BackBar from "./backBar";
+import BackBar from "./BackBar";
 import ItemCollections from "./ItemCollections";
 import RequiresSignIn from "./RequiresSignIn";
 
