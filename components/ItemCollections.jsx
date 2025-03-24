@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NewCollectionBar from "./NewCollectionBar";
-import CollectionBar from "./collectionBar";
+import CollectionBar from "./CollectionBar";
 import { getCollections } from "../src/utils/api";
 
 const ItemCollections = ({ item }) => {
