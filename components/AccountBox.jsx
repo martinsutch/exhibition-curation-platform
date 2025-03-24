@@ -30,7 +30,7 @@ const AccountBox = ({ setUserId, userId }) => {
         email: emailValue,
         password: passwordValue,
       });
-      await handleSignIn();
+      setErrorMessage("Account created successfully! Please sign in.");
       setCreatingAccount(false);
     } catch (error) {
       setErrorMessage("Failed to create account. Please try again.");
