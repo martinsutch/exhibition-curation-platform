@@ -117,7 +117,9 @@ const AccountBox = ({ setUserId, userId }) => {
     <div className="block column single">
       <h2>Account</h2>
       <div className="inputRow">
-        <label htmlFor="email">Email address</label>
+        <label className="otherLabel" htmlFor="email">
+          Email address
+        </label>
         <input
           id="email"
           className="otherInput"
@@ -129,7 +131,9 @@ const AccountBox = ({ setUserId, userId }) => {
         />
       </div>
       <div className="inputRow">
-        <label htmlFor="password">Password</label>
+        <label className="otherLabel" htmlFor="password">
+          Password
+        </label>
         <input
           id="password"
           className="otherInput"
