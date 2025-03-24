@@ -26,6 +26,11 @@ export const signInUser = async (info) => {
   return data;
 };
 
+export const checkSignedIn = async () => {
+  const { data } = await api.get("/users");
+  return data;
+};
+
 export const signOutUser = async () => {
   const { data } = await api.post("/users/signOut");
   localStorage.removeItem("token");

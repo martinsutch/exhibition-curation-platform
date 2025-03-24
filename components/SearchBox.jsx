@@ -1,26 +1,30 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const SearchBox = ({
-  searchValue,
-  handleSearchChange,
-  handleSearch,
   tally,
-  filters,
-  setFilters,
-  sortBy,
-  setSortBy,
-  order,
-  setOrder,
   displayLength,
   noData,
+  setLastPage,
+  isLoading,
 }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filterExpanded, setFilterExpanded] = useState(false);
   const [sortExpanded, setSortExpanded] = useState(false);
+
+  const searchValue = searchParams.get("q") || "";
+  const sortBy = searchParams.get("sortBy") || "repository";
+  const order = searchParams.get("order") || "asc";
+  const filters = Object.fromEntries(
+    [...searchParams.entries()].filter(
+      ([key]) => !["q", "page", "sortBy", "order"].includes(key)
+    )
+  );
+
+  const [draftSearchValue, setDraftSearchValue] = useState(searchValue);
   const [draftFilters, setDraftFilters] = useState({ ...filters });
   const [draftSortBy, setDraftSortBy] = useState(sortBy);
   const [draftOrder, setDraftOrder] = useState(order);
-
-  const sortOptions = ["title", "period", "repository"];
 
   const handleFilterChange = (key, value) => {
     setDraftFilters((prev) => ({
@@ -30,21 +34,49 @@ const SearchBox = ({
   };
 
   const applyFilter = () => {
-    setFilters(draftFilters);
+    setSearchParams({
+      ...Object.fromEntries(
+        Object.entries(draftFilters).filter(([_, value]) => value !== "")
+      ),
+      q: searchValue,
+      page: "1",
+      sortBy,
+      order,
+    });
     setFilterExpanded(false);
   };
 
   const applySort = () => {
-    setSortBy(draftSortBy);
-    setOrder(draftOrder);
+    setSearchParams({
+      ...Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== "")
+      ),
+      q: searchValue,
+      page: "1",
+      sortBy: draftSortBy,
+      order: draftOrder,
+    });
     setSortExpanded(false);
+  };
+
+  const handleSearch = () => {
+    setSearchParams({
+      ...Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== "")
+      ),
+      q: draftSearchValue,
+      page: "1",
+      sortBy,
+      order,
+    });
+    setLastPage(Infinity);
   };
 
   const filterKeys = Object.keys(filters).filter((key) => filters[key]);
   const filterMessage =
     filterKeys.length > 0
       ? `Filtered by ${filterKeys.join(" and ")}.`
-      : "Showing all results.";
+      : "No filters applied.";
   const displayMessage = `Displaying ${displayLength} results. ${filterMessage} Sorted by ${sortBy}.`;
 
   const renderDropdown = (label, key) => {
@@ -62,12 +94,15 @@ const SearchBox = ({
       ));
 
     return (
-      <div>
-        <label htmlFor={key}>{label} </label>
+      <div className="inputRow">
+        <label className="otherLabel" htmlFor={key}>
+          {label}{" "}
+        </label>
         <select
           id={key}
           value={draftFilters[key] || ""}
           onChange={(e) => handleFilterChange(key, e.target.value)}
+          className="otherInput"
         >
           <option value="">All</option>
           {options}
@@ -78,6 +113,16 @@ const SearchBox = ({
 
   return (
     <div className="block highlight column">
+      {noData && !isLoading ? (
+        <p className="otherLabel">
+          Welcome to <strong>Exhibit</strong>, your gateway to discovering
+          beautiful artworks from a range of global repositories. Use the search
+          box below to explore stunning pieces with any word that comes to mind
+          - whether it's an artist, a theme, or a style. Start by searching
+          below, then refine your results using filters and sorting options to
+          find the perfect pieces for your <strong>Exhibit</strong>.
+        </p>
+      ) : null}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -87,20 +132,23 @@ const SearchBox = ({
         <input
           className="search"
           type="text"
-          value={searchValue}
-          onChange={handleSearchChange}
-          placeholder="Search collections..."
-          onSubmit={handleSearch}
+          value={draftSearchValue}
+          onChange={(e) => setDraftSearchValue(e.target.value)}
+          placeholder="Search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
         />
         <div className="card">
-          <button type="submit">Search</button>
+          <button type="submit">{isLoading ? "Searching..." : "Search"}</button>
         </div>
       </form>
       <div className="collectionRow">
         <div></div>
         {filterExpanded || sortExpanded ? null : (
           <>
-            <span>{displayMessage}</span>
+            {noData ? <></> : <span>{displayMessage}</span>}
             <div className="gap">
               <button
                 onClick={() => {
@@ -133,7 +181,7 @@ const SearchBox = ({
         ) : null}
       </div>
       {filterExpanded ? (
-        <div>
+        <div className="filterColumn">
           {renderDropdown("Type", "type")}
           {renderDropdown("Location", "location")}
           {renderDropdown("Creator", "creator")}
@@ -142,24 +190,30 @@ const SearchBox = ({
         </div>
       ) : null}
       {sortExpanded ? (
-        <div>
-          <label htmlFor="sort">Sort by </label>
-          <select
-            id="sort"
-            value={draftSortBy}
-            onChange={(e) => setDraftSortBy(e.target.value)}
-          >
-            <option value="title">Title</option>
-            <option value="period">Period</option>
-            <option value="repository">Repository</option>
-          </select>
-          <select
-            value={draftOrder}
-            onChange={(e) => setDraftOrder(e.target.value)}
-          >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
+        <div className="filterColumn">
+          <div className="inputRow">
+            <label className="otherLabel" htmlFor="sort">
+              Sort by{" "}
+            </label>
+            <select
+              id="sort"
+              value={draftSortBy}
+              onChange={(e) => setDraftSortBy(e.target.value)}
+              className="otherInput"
+            >
+              <option value="title">Title</option>
+              <option value="period">Period</option>
+              <option value="repository">Repository</option>
+            </select>
+            <select
+              value={draftOrder}
+              onChange={(e) => setDraftOrder(e.target.value)}
+              className="otherInput"
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
         </div>
       ) : null}
     </div>

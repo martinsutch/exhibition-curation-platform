@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import AccountBox from "./AccountBox";
 import AccountCollections from "./AccountCollections";
+import RequiresSignIn from "./RequiresSignIn";
 
 const AccountPage = () => {
   const [columns, setColumns] = useState(1);
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
     const updateColumns = () => {
@@ -19,17 +21,23 @@ const AccountPage = () => {
     return () => window.removeEventListener("resize", updateColumns);
   }, []);
 
+  const renderCollectionSection = () => {
+    return (
+      <RequiresSignIn userId={userId}>
+        <AccountCollections userId={userId} />
+      </RequiresSignIn>
+    );
+  };
+
   return (
     <div className="page">
       <div className="resultColumns">
         <div className={`resultColumn ${columns !== 1 ? "maxW" : null}`}>
-          <AccountBox />
-          {columns === 1 ? <AccountCollections /> : null}
+          <AccountBox setUserId={setUserId} userId={userId} />
+          {columns === 1 ? <>{renderCollectionSection()}</> : null}
         </div>
         {columns !== 1 ? (
-          <div className="resultColumn">
-            <AccountCollections />
-          </div>
+          <div className="resultColumn">{renderCollectionSection()}</div>
         ) : null}
       </div>
     </div>

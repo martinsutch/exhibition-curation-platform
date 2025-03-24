@@ -5,6 +5,7 @@ import ItemDetails from "./ItemDetails";
 import { useItem } from "../src/hooks/useItem";
 import BackBar from "./backBar";
 import ItemCollections from "./ItemCollections";
+import RequiresSignIn from "./RequiresSignIn";
 
 const ItemPage = () => {
   const { id } = useParams();
@@ -44,7 +45,9 @@ const ItemPage = () => {
         <div className={`resultColumn ${columns !== 1 ? "maxW" : null}`}>
           {columns === 1 ? <ItemImage item={item} /> : null}
           <ItemDetails item={item} />
-          <ItemCollections item={item} />
+          <RequiresSignIn>
+            <ItemCollections item={item} />
+          </RequiresSignIn>
         </div>
       </div>
     </div>

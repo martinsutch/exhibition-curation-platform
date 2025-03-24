@@ -7,24 +7,17 @@ import NavBar from "./NavBar";
 
 const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchValueFromURL = searchParams.get("q") || "";
-  const pageFromURL = parseInt(searchParams.get("page")) || 1;
-  const sortByFromURL = parseInt(searchParams.get("sortBy")) || "repository";
-  const orderFromURL = parseInt(searchParams.get("order")) || "asc";
-  const [searchValue, setSearchValue] = useState(searchValueFromURL);
-  const searchTerm = searchValueFromURL;
-  const page = pageFromURL;
-  const { data, isLoading, error } = useCollections(searchTerm, page);
+  const searchValue = searchParams.get("q") || "";
+  const page = parseInt(searchParams.get("page")) || 1;
+  const sortBy = searchParams.get("sortBy") || "repository";
+  const order = searchParams.get("order") || "asc";
+  const filters = Object.fromEntries(
+    [...searchParams.entries()]
+      .filter(([key]) => !["q", "page", "sortBy", "order"].includes(key))
+      .map(([key, value]) => [key, value || ""])
+  );
+  const { data, isLoading, error } = useCollections(searchValue, page);
   const [lastPage, setLastPage] = useState(Infinity);
-  const [sortBy, setSortBy] = useState(sortByFromURL);
-  const [order, setOrder] = useState(orderFromURL);
-  const [filters, setFilters] = useState({
-    type: "",
-    location: "",
-    creator: "",
-    period: "",
-    repository: "",
-  });
 
   const [tally, setTally] = useState({
     types: new Map(),
@@ -60,91 +53,64 @@ const HomePage = () => {
     setTally(newTally);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchValue(e.target.value);
-  };
-
-  const handleSearch = () => {
-    setSearchParams({ q: searchValue, page: 1, sortBy: sortBy, order: order });
-    setLastPage(Infinity);
-  };
-
-  const handleNextPage = () => {
-    setSearchParams({
-      q: searchTerm,
-      page: page + 1,
-      sortBy: sortBy,
-      order: order,
-    });
-  };
-
-  const handlePrevPage = () => {
-    if (page > 1) {
-      setSearchParams({
-        q: searchTerm,
-        page: page - 1,
-        sortBy: sortBy,
-        order: order,
-      });
-    }
-  };
-
   const filteredData = data
-    ? data.filter((item) => {
-        return Object.entries(filters).every(([key, value]) => {
-          return value === "" || item[key] === value;
-        });
-      })
+    ? data.filter((item) =>
+        Object.entries(filters).every(
+          ([key, value]) => value === "" || String(item[key]) === String(value)
+        )
+      )
     : [];
 
   const sortedData = filteredData.sort((a, b) => {
-    if (!sortBy || !a.hasOwnProperty(sortBy) || !b.hasOwnProperty(sortBy)) {
-      return 0;
-    }
-
-    const valueA = a[sortBy];
-    const valueB = b[sortBy];
-
-    if (typeof valueA === "string" && typeof valueB === "string") {
-      return order === "desc"
-        ? valueB.localeCompare(valueA)
-        : valueA.localeCompare(valueB);
-    }
-
-    return order === "desc" ? valueB - valueA : valueA - valueB;
+    if (!sortBy || !a[sortBy] || !b[sortBy]) return 0;
+    return order === "desc"
+      ? String(b[sortBy]).localeCompare(String(a[sortBy]))
+      : String(a[sortBy]).localeCompare(String(b[sortBy]));
   });
 
   useEffect(() => {
-    if (data && data.length === 0) {
-      setLastPage(page);
+    if (data && data.length === 0 && page > 1) {
+      setLastPage(page - 1);
       setSearchParams({
-        q: searchTerm,
+        q: searchValue,
         page: page - 1,
-        sortBy: sortBy,
-        order: order,
+        sortBy,
+        order,
+        ...filters,
       });
     }
-  }, [data, sortBy, order]);
+  }, [data, sortBy, order, filters]);
 
   useEffect(() => {
     if (data) tallyFilters(data);
   }, [data]);
 
+  useEffect(() => {
+    const newParams = new URLSearchParams(searchParams);
+
+    newParams.set("q", searchValue);
+    newParams.set("page", page);
+    newParams.set("sortBy", sortBy);
+    newParams.set("order", order);
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) newParams.set(key, value);
+      else newParams.delete(key);
+    });
+
+    if (newParams.toString() !== searchParams.toString()) {
+      setSearchParams(newParams);
+    }
+  }, [searchValue, page, sortBy, order, filters]);
+
   return (
     <div className="page">
       <SearchBox
-        searchValue={searchValue}
-        handleSearchChange={handleSearchChange}
-        handleSearch={handleSearch}
         tally={tally}
-        filters={filters}
-        setFilters={setFilters}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        order={order}
-        setOrder={setOrder}
         displayLength={filteredData.length}
         noData={!data}
+        setLastPage={setLastPage}
+        isLoading={isLoading}
       />
       <Results
         isLoading={isLoading}
@@ -153,13 +119,7 @@ const HomePage = () => {
         page={page}
         data={sortedData}
       />
-      <NavBar
-        handlePrevPage={handlePrevPage}
-        page={page}
-        handleNextPage={handleNextPage}
-        noData={!data}
-        lastPage={lastPage}
-      />
+      <NavBar noData={!data} lastPage={lastPage} />
     </div>
   );
 };

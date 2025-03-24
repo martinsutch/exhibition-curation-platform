@@ -9,6 +9,11 @@
   padding: 5pt;
 }
 
+.account {
+  height: 32pt;
+  padding: 5pt;
+}
+
 .card {
   padding: 2em;
 }
@@ -17,6 +22,12 @@
   display: flex;
   flex-direction: column;
   padding-top: 70pt;
+}
+
+.wrap {
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: right;
 }
 
 .pageWrap {
@@ -58,6 +69,10 @@
   color: #a53860;
 }
 
+.middle {
+  justify-content: center;
+}
+
 .block {
   flex: auto;
   display: flex;
@@ -88,12 +103,12 @@
 
 .highlight {
   background-color: #ffeedb;
-  padding-top: 30pt;
-  padding-bottom: 10pt;
   color: black;
 }
 
 .search {
+  flex: 1;
+  flex-grow: 1;
   background-color: white;
   color: black;
   padding: 8pt;
@@ -102,6 +117,25 @@
   border-radius: 15pt;
   border-style: solid;
   border-color: #4c3b4d;
+  margin-top: 20pt;
+}
+
+.otherInput {
+  background-color: white;
+  color: black;
+  padding: 5pt;
+  border-radius: 15pt;
+  border-style: solid;
+  border-color: #4c3b4d;
+  flex-grow: 1;
+}
+
+.otherLabel {
+  padding: 5pt;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .row {
@@ -110,7 +144,20 @@
   align-items: center;
 }
 
+.inputRow {
+  background-color: white;
+  border-radius: 15pt;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  gap: 10pt;
+  flex-wrap: wrap;
+}
+
 .column {
+  display: flex;
   flex-direction: column;
 }
 
@@ -177,5 +224,32 @@
 
 .gap {
   display: flex;
+  gap: 5pt;
+}
+
+h1 {
+  margin: 0pt;
+}
+
+.textLink {
+  background: none;
+  border: none;
+  color: #4c3b4d;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+}
+.textLink:hover {
+  color: #a53860;
+}
+.textLink:focus {
+  outline: none;
+}
+
+.filterColumn {
+  display: flex;
+  flex-direction: column;
+  padding: 5pt;
   gap: 5pt;
 }

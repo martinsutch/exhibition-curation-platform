@@ -12,7 +12,7 @@ const Header = () => {
           <h1 className="title">ExhiBit</h1>
         </Link>
         <Link to={"../../account"} className="row">
-          <img src={accountFilled} className="logo" alt="Account" />
+          <img src={accountFilled} className="account" alt="Account" />
         </Link>
       </div>
     </>

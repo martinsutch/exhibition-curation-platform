@@ -6,6 +6,7 @@ import { getCollections } from "../src/utils/api";
 const ItemCollections = ({ item }) => {
   const [collections, setCollections] = useState([]);
   const [isWaiting, setIsWaiting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -14,7 +15,7 @@ const ItemCollections = ({ item }) => {
         const fetchedCollections = await getCollections();
         setCollections(fetchedCollections);
       } catch (error) {
-        console.error("Error fetching collections:", error);
+        setErrorMessage("Error fetching collections. Please reload the page.");
       } finally {
         setIsWaiting(false);
       }
@@ -25,7 +26,8 @@ const ItemCollections = ({ item }) => {
 
   return (
     <div className="block column">
-      <span>Collections</span>
+      <h2>Collections</h2>
+      <span>{errorMessage}</span>
       {isWaiting ? (
         <span>Loading your collections...</span>
       ) : collections.length === 0 ? (
@@ -42,7 +44,10 @@ const ItemCollections = ({ item }) => {
         })
       )}
 
-      <NewCollectionBar setCollections={setCollections} />
+      <NewCollectionBar
+        setCollections={setCollections}
+        collections={collections}
+      />
     </div>
   );
 };

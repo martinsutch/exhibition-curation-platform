@@ -51,7 +51,6 @@ const fetchFromMet = async (searchTerm, page) => {
       `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectIDs[i]}`
     );
     const item = await objRes.json();
-
     if (item.primaryImage) {
       details.push({
         id: item.objectID,

@@ -7,6 +7,8 @@ const CollectionArt = ({ art }) => {
   const [item, setItem] = useState(null);
   const { data, isLoading, error } = useItem(art.artpath);
   const [deleted, setDeleted] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (data) {
@@ -15,11 +17,16 @@ const CollectionArt = ({ art }) => {
   }, [data]);
 
   const handleDeleteArt = async () => {
+    setIsWaiting(true);
+    setErrorMessage("");
     try {
       await deleteArt({ id: art.id });
       setDeleted(true);
     } catch (error) {
-      console.error("Error deleting collection:", error);
+      console.error("Error deleting artwork:", error);
+      setErrorMessage("Failed to delete artwork. Please try again.");
+    } finally {
+      setIsWaiting(false);
     }
   };
 
@@ -36,7 +43,13 @@ const CollectionArt = ({ art }) => {
               alt={item.title}
             />
           </Link>
-          <button onClick={handleDeleteArt}>Remove from collection</button>
+          <div className="collectionRow gap">
+            <span>{item.title}</span>
+            <button onClick={handleDeleteArt} disabled={isWaiting}>
+              Remove from collection
+            </button>
+          </div>
+          <span>{errorMessage}</span>
         </div>
       ) : null}
     </>

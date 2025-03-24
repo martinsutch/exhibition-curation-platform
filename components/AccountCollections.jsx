@@ -3,7 +3,7 @@ import NewCollectionBar from "./NewCollectionBar";
 import CollectionBar from "./collectionBar";
 import { getCollections } from "../src/utils/api";
 
-const AccountCollections = () => {
+const AccountCollections = ({ userId }) => {
   const [collections, setCollections] = useState([]);
   const [isWaiting, setIsWaiting] = useState(false);
 
@@ -21,11 +21,11 @@ const AccountCollections = () => {
     };
 
     fetchCollections();
-  }, []);
+  }, [userId]);
 
   return (
     <div className="block column">
-      <span>Collections</span>
+      <h2>Collections</h2>
       {isWaiting ? (
         <span>Loading your collections...</span>
       ) : collections.length === 0 ? (
@@ -36,7 +36,10 @@ const AccountCollections = () => {
         })
       )}
 
-      <NewCollectionBar setCollections={setCollections} />
+      <NewCollectionBar
+        setCollections={setCollections}
+        collections={collections}
+      />
     </div>
   );
 };
