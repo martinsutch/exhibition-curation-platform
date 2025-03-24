@@ -2,6 +2,10 @@
 
 View this project live: https://exhibition-curation-platform-yh57.onrender.com/
 
+Watch an overview of the project: https://youtu.be/6V-iEOFBMI0
+
+Visit the backend repo: https://github.com/martinsutch/exhibition-curation-api.git
+
 ## Project Overview
 
 **Exhibit** enables users to explore virtual exhibitions featuring artworks from various museums and universities. This platform is tailored for researchers, students, and art enthusiasts, providing an interactive and engaging way to explore collections of antiquities and fine art from across the world. Users can search for artworks, create personal exhibitions, and curate their own collection of pieces from these global repositories.
